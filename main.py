@@ -1,37 +1,70 @@
 from bs4.element import NavigableString
 import requests
 from bs4 import BeautifulSoup
+import numpy as np
 
 # 想要搜尋的看板
 title = "studyabroad"
 
 URL = "https://www.ptt.cc/bbs/" + title + "/index.html"
+
+# get the website
 req = requests.get(URL)
 
-# BeautifulSoup object
-bs = BeautifulSoup(req.text, "html.parser")
+# get html 
+html_doc = req.text
+
+# bs4.BeautifulSoup object
+bs = BeautifulSoup(html_doc, "html.parser")
+
+
+# print(type(bs))
+# print(bs.title)
+# print(bs.title.name)
+# print(bs.title.string)
+# print(bs.title.parent.name)
+# print(bs.a)
+# print(type(bs.a))
+
+# print(bs.a.string)
+# print(type(bs.a.string))
 
 # select all 'div' tag with attribute class='title'
 # return a bs4.element.ResultSet object
-div = bs.find_all(name='div', class_="title")
+div = bs.find_all('div', class_="r-ent")
 
 result = []
+for item in div:
+    attr = {}
 
-for i in div:
-    # get only tag element, skip NavigableString object
-    if isinstance(i, NavigableString): continue
+    # locate title and url
+    title = item.find("div", class_="title")
 
-    print(i)
+    try:
+        attr["title"] = title.find('a').string
+    except:
+        attr["title"] = None
 
-    article_title = i.contents
-    article_href  = i.href
+    try:
+        attr["url"] = title.find('a')['href']
+    except:
+        attr["url"] = None
 
+    # locate date
+    try:
+        attr["date"] = item.find("div", class_="date").string
+    except:
+        attr["date"] = None
+    
 
-    # result.append({"title": article_title, "url": article_href})
+    # locate upvotes
+    attr["upvotes"] = item.find("div", class_='nrec').string
+
+    result.append(attr)
 
 for i in result:
     print(i)
 
-# alternative approach, using CSS selector, return a list
-# div = bs.select("div.title")
+    
+    
 
