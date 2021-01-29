@@ -19,18 +19,6 @@ html_doc = req.text
 # bs4.BeautifulSoup object
 bs = BeautifulSoup(html_doc, "html.parser")
 
-
-# print(type(bs))
-# print(bs.title)
-# print(bs.title.name)
-# print(bs.title.string)
-# print(bs.title.parent.name)
-# print(bs.a)
-# print(type(bs.a))
-
-# print(bs.a.string)
-# print(type(bs.a.string))
-
 # select all 'div' tag with attribute class='title'
 # return a bs4.element.ResultSet object
 div = bs.find_all('div', class_="r-ent")
