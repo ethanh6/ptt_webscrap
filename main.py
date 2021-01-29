@@ -2,6 +2,8 @@ from bs4.element import NavigableString
 import requests
 from bs4 import BeautifulSoup
 import numpy as np
+import pandas as pd 
+import json
 
 # 想要搜尋的看板
 title = "studyabroad"
@@ -62,8 +64,11 @@ for item in div:
 
     result.append(attr)
 
-for i in result:
-    print(i)
+# for i in result:
+#     print(i)
+
+df = pd.read_json(json.dumps(result))
+print(df.head())
 
     
     
