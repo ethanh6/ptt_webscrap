@@ -1,0 +1,1 @@
+# To get ptt webpage update notification

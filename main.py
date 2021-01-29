@@ -1,3 +1,4 @@
+from bs4.element import NavigableString
 import requests
 from bs4 import BeautifulSoup
 
@@ -5,18 +6,32 @@ from bs4 import BeautifulSoup
 title = "studyabroad"
 
 URL = "https://www.ptt.cc/bbs/" + title + "/index.html"
-article_href = []
 req = requests.get(URL)
+
+# BeautifulSoup object
 bs = BeautifulSoup(req.text, "html.parser")
 
-# list of tag with <a>
-result = bs.select("div.title")
+# select all 'div' tag with attribute class='title'
+# return a bs4.element.ResultSet object
+div = bs.find_all(name='div', class_="title")
 
-for i in result[:5]:
+result = []
+
+for i in div:
+    # get only tag element, skip NavigableString object
+    if isinstance(i, NavigableString): continue
+
     print(i)
 
-# article_href = [item.select("a").get("href") for item in result]
+    article_title = i.contents
+    article_href  = i.href
 
-print(article_href)
 
+    # result.append({"title": article_title, "url": article_href})
+
+for i in result:
+    print(i)
+
+# alternative approach, using CSS selector, return a list
+# div = bs.select("div.title")
 
