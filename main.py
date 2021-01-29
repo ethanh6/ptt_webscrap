@@ -6,9 +6,9 @@ import pandas as pd
 import json
 
 # 想要搜尋的看板
-title = "studyabroad"
+board_name = "studyabroad"
 
-URL = "https://www.ptt.cc/bbs/" + title + "/index.html"
+URL = "https://www.ptt.cc/bbs/" + board_name + "/index.html"
 
 # get the website
 req = requests.get(URL)
@@ -64,12 +64,22 @@ for item in div:
 
     result.append(attr)
 
-# for i in result:
-#     print(i)
+def print_attr(data, attr):
+    for d in data:
+        for k, v in d.items():
+            if k == attr:
+                print(v)
 
-df = pd.read_json(json.dumps(result))
-print(df.head())
+def write_to_json():
+    with open('data/' + board_name + ".json", 'w') as fout:
+        json.dump(result, fout)
 
-    
-    
+write_to_json()
 
+
+def read_file():
+    with open('data/' + board_name + ".json", "r") as fin:
+        DATA = json.load(fin)
+    print_attr(DATA, "title")
+
+read_file()
